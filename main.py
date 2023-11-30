@@ -1,6 +1,7 @@
 import time
 import RPi.GPIO as GPIO
 import Adafruit_PCA9685
+import threading
 
 class Colors:
     RED = '\033[91m'
@@ -15,7 +16,7 @@ class Servo_Controller_Class:
         self.m_ZeroOffset = ZeroOffset
 
         self.mPwm = Adafruit_PCA9685.PCA9685(address = 0x40)
-        self.mPwm.set_pwm_freq(60)
+        self.mPwm.set_pwm_freq(50)
     
     def SetPos(self,pos):
         pulse = (650-150)*pos/180+150+self.m_ZeroOffset
@@ -25,16 +26,21 @@ class Servo_Controller_Class:
         self.SetPos(90)
         time.sleep(1)
 
+Servo_controller = []
+Servo_action_thread = []
+action_range = [[0]]
+
+def servo_action(controller,pos,delay)
+
 if __name__ == '__main__':
-    Servo = Servo_Controller_Class(Channel = 0, ZeroOffset = -90)
+    for i in range(11):
+        Servo_controller.append(Servo_Controller_Class(Channel = i, ZeroOffset = -10)) 
+    
+    for controller_thread in Servo_controller:
+        Servo_action_thread.append(threading.Thread(target = servo_action, args = (controller_thread,)))
 
     try:
-        Servo.SetPos(0)
-        time.sleep(1)
-        Servo.SetPos(90)
-        time.sleep(1)
-        Servo.SetPos(180)
-        time.sleep(1)
+        pass
     except KeyboardInterrupt:
         print("Ctrl + C: "+Colors.BLUE+"KeyboardInterrupt"+Colors.END)
     except Exception as e:

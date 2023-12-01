@@ -25,7 +25,6 @@ if __name__ == '__main__':
     angle_max = 90
     angle_delay_t = 0.01
     a=0
-    
     try:
         while True:
     #         for i in range(angle_max):

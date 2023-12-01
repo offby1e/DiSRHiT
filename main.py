@@ -29,15 +29,18 @@ class Servo_Controller_Class:
 
 Servo_controller = []
 Servo_action_thread = []
-action_range = [[0]]
+action_range = [[0] for _ in range(2)]
 action_lock=[threading.Lock() for _ in action_range]
 
 client_sockets = []
 HOST = socket.gethostbyname(socket.gethostname())
 PORT = 7672
 
+def append_angle(index,pos):
+    pass
+
 def handle_client(client_socket, addr):
-    print('>> Connected by:', addr[0], ':', addr[1])
+    global action_range
     print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Connected by: {addr[0]}:{addr[1]}{Colors.END}")
 
     while True:
@@ -52,6 +55,19 @@ def handle_client(client_socket, addr):
             for client in client_sockets:
                 if client != client_socket:
                     client.send(data)
+            
+            append_action_thread=[]
+
+            command = list(data.decode().split(':'))
+            if command[0] == 'action':
+                for index in range(11):
+                    append_action_thread.append(threading.Thread(target=append_angle, args=(index,command[index+1])))
+
+                for action_thread in append_action_thread:
+                    action_thread.start()
+
+                
+
 
         except ConnectionResetError as e:
             print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Disconnected by: {addr[0]}:{addr[1]}{Colors.END}")
@@ -93,7 +109,7 @@ def servo_action(controller,pos,index):
     global action_range
     while True:
         controller.SetPos(pos[0])
-        action_lock[index].acquire
+        action_lock[index].acquire()
         if len(action_range[index]) > 1:
             action_range[index].pop(0)
         #action_lock.close

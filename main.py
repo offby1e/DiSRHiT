@@ -134,7 +134,7 @@ if __name__ == '__main__':
             if index>4:
                 channel+=1
             Servo_controller.append(Servo_Controller_Class(Channel = channel, ZeroOffset = -10)) 
-            print(f"{Colors.Green}[Servo Controller] {Colors.END}{Colors.BLUE}Init Controller No.{channel}{Colors.END}")
+            print(f"{Colors.GREEN}[Servo Controller] {Colors.END}{Colors.BLUE}Init Controller No.{channel}{Colors.END}")
         
         index=0
         for controller_thread in Servo_controller:

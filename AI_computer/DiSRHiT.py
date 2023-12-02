@@ -15,6 +15,7 @@ hand_way="None"
 mode="normal"
 # [[4,3,2],[3,2,1],[2,1,0],[1,0,5],[8,7,6],[7,6,5],[6,5,0],[12,11,10],[11,10,9],[10,9,0],[16,15,14],[15,14,13],[14,13,0],[20,19,18],[19,18,17],[18,17,0]]          [1,5,6],[0,9,10],[0,13,14],[0,17,18]
 joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18],[7,6,5],[11,10,9],[15,14,13],[19,18,17]]
+
 def draw_finger_angles(image, results, joint_list):
     cnt=0
     for hand in results.multi_hand_landmarks:
@@ -42,6 +43,7 @@ def draw_finger_angles(image, results, joint_list):
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1 ,cv2.LINE_AA)
             cnt+=1
     return image
+
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,max_num_hands=1) as hands: 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -91,10 +93,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,ma
         elif hand_way=="Left":
             text="Hand: Left"
             font_color=(0,0,255)
-            # pygame.mixer.init()
-            # pygame.mixer.music.load('message.mp3')
-            # pygame.mixer.music.play()
-            # time.sleep(1.2)
         else:
             text="Hand: None"
             font_color=(255,255,255)

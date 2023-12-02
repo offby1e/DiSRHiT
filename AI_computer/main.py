@@ -10,18 +10,44 @@ import time
 import socket
 import threading
 
-HOST = '10.244.84.129'  # 서버에 출력되는 IP를 입력하세요
+class Colors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+    
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+    END = '\033[0m'
+
+HOST = '10.244.84.28'  # 서버에 출력되는 IP를 입력하세요
 PORT = 7672
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((HOST, PORT))
+try:
+    client_socket.connect((HOST, PORT))
+except ConnectionError as e:
+    print(f"{Colors.YELLOW}[Socket]{Colors.END}{Colors.RED}[Error] {e}{Colors.END}")
+    exit()
 
 def recv_data(client_socket):
     while True:
-        data = client_socket.recv(1024)
-        if not data:
+        try:
+            data = client_socket.recv(1024)
+            if not data:
+                break
+            print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Received: {Colors.END}{Colors.WHITE}{repr(data.decode())}{Colors.END}")
+        except ConnectionError as e:
+            print(f"{Colors.YELLOW}[Socket]{Colors.END}{Colors.RED}[Error: receiving data]: {e}{Colors.END}")
             break
-        print("Received: ", repr(data.decode()))
+
+recv_thread = threading.Thread(target=recv_data, args=(client_socket,))
+recv_thread.start()
+print(f'{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Connected to the Server{Colors.END}')
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -31,9 +57,10 @@ hand_way="None"
 mode="normal"
 send_angle=[]
 temp_arr=[]
-# [[4,3,2],[3,2,1],[2,1,0],[1,0,5],[8,7,6],[7,6,5],[6,5,0],[12,11,10],[11,10,9],[10,9,0],[16,15,14],[15,14,13],[14,13,0],[20,19,18],[19,18,17],[18,17,0]]          [1,5,6],[0,9,10],[0,13,14],[0,17,18]
-joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18]]
+joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18]]# [[4,3,2],[3,2,1],[2,1,0],[1,0,5],[8,7,6],[7,6,5],[6,5,0],[12,11,10],[11,10,9],[10,9,0],[16,15,14],[15,14,13],[14,13,0],[20,19,18],[19,18,17],[18,17,0]]          [1,5,6],[0,9,10],[0,13,14],[0,17,18]
+
 def draw_finger_angles(image, results, joint_list):
+    cnt=0
     # Loop through hands
     for hand in results.multi_hand_landmarks:
         global send_angle,temp_arr
@@ -50,20 +77,21 @@ def draw_finger_angles(image, results, joint_list):
             if angle > 180.0:
                 angle = 360-angle
             angle=180-angle
+            if cnt>=4:
+                if angle>110.0:
+                    angle=90.0
+                if angle>=0 and angle<=110:
+                    angle=(angle/110)*90
+                    angle=90-angle
             angle=str(round(angle, 2))
             temp_arr.append(angle)
             cv2.putText(image, angle, tuple(np.multiply(b, [640, 480]).astype(int)),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1 ,cv2.LINE_AA)
-            if angle>90:
-                angle=90
         send_angle=temp_arr
         message=f"action:{send_angle[0]}:{send_angle[1]}:{send_angle[2]}:{send_angle[3]}:0:0:0:0:0:0:0"
         client_socket.send(message.encode())
+        print(f"{Colors.CYAN}[Detected the Hand]{Colors.END} {Colors.WHITE}angle: {send_angle}{Colors.END}")
     return image
-
-recv_thread = threading.Thread(target=recv_data, args=(client_socket,))
-recv_thread.start()
-print('>> Connected to the Server')
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,max_num_hands=1) as hands: 
     while cap.isOpened():
@@ -92,7 +120,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,ma
         if type(handway_result) is list:
             if "Right" in str(handway_result):
                 hand_way="Right"
-                print("Detected the right hand.")
                 # Rendering results
                 if results.multi_hand_landmarks:
                     for num, hand in enumerate(results.multi_hand_landmarks):
@@ -114,10 +141,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,ma
         elif hand_way=="Left":
             text="Hand: Left"
             font_color=(0,0,255)
-            # pygame.mixer.init()
-            # pygame.mixer.music.load('message.mp3')
-            # pygame.mixer.music.play()
-            # time.sleep(1.2)
         else:
             text="Hand: None"
             font_color=(255,255,255)
@@ -126,6 +149,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,ma
         cv2.imshow("DiSRHiT", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
+
 cap.release()
 cv2.destroyAllWindows()
 client_socket.close()

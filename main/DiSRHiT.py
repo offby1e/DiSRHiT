@@ -13,9 +13,10 @@ mp_hands = mp.solutions.hands
 cap = cv2.VideoCapture(0)
 hand_way="None"
 mode="normal"
-joint_list = [[4,3,2],[3,2,1],[2,1,0],[1,0,5],[8,7,6],[7,6,5],[6,5,0],[12,11,10],[11,10,9],[10,9,0],[16,15,14],[15,14,13],[14,13,0],[20,19,18],[19,18,17],[18,17,0]]
+# [[4,3,2],[3,2,1],[2,1,0],[1,0,5],[8,7,6],[7,6,5],[6,5,0],[12,11,10],[11,10,9],[10,9,0],[16,15,14],[15,14,13],[14,13,0],[20,19,18],[19,18,17],[18,17,0]]          [1,5,6],[0,9,10],[0,13,14],[0,17,18]
+joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18],[7,6,5],[11,10,9],[15,14,13],[19,18,17]]
 def draw_finger_angles(image, results, joint_list):
-    # Loop through hands
+    cnt=0
     for hand in results.multi_hand_landmarks:
         #Loop through joint sets
         for joint in joint_list:
@@ -28,9 +29,18 @@ def draw_finger_angles(image, results, joint_list):
 
             if angle > 180.0:
                 angle = 360-angle
+            angle=180-angle
+            if cnt>=4:
+                if angle>110.0:
+                    angle=90.0
+                if angle>=0 and angle<=110:
+                    angle=(angle/110)*90
+                    angle=90-angle
+            
             angle=str(round(angle, 2))
             cv2.putText(image, angle, tuple(np.multiply(b, [640, 480]).astype(int)),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1 ,cv2.LINE_AA)
+            cnt+=1
     return image
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,max_num_hands=1) as hands: 
     while cap.isOpened():

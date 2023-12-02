@@ -24,7 +24,7 @@ class Colors:
 
     END = '\033[0m'
 
-HOST = '10.244.84.28'  # 서버에 출력되는 IP를 입력하세요
+HOST = '10.244.84.105'  # 서버에 출력되는 IP를 입력하세요
 PORT = 7672
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -87,6 +87,9 @@ def draw_finger_angles(image, results, joint_list):
             temp_arr.append(angle)
             cv2.putText(image, angle, tuple(np.multiply(b, [640, 480]).astype(int)),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1 ,cv2.LINE_AA)
+            if cnt>=4 and float(angle)<30:
+                    angle=30
+            cnt+=190
         send_angle=temp_arr
         message=f"action:{send_angle[0]}:{send_angle[1]}:{send_angle[2]}:{send_angle[3]}:0:0:0:0:0:0:0"
         client_socket.send(message.encode())

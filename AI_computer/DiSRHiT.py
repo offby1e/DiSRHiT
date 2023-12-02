@@ -41,6 +41,8 @@ def draw_finger_angles(image, results, joint_list):
             angle=str(round(angle, 2))
             cv2.putText(image, angle, tuple(np.multiply(b, [640, 480]).astype(int)),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1 ,cv2.LINE_AA)
+            if cnt>=4 and float(angle)<30:
+                    angle=30
             cnt+=1
     return image
 

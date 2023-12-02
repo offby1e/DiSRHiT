@@ -2,7 +2,7 @@ import socket
 import threading
 
 client_sockets = []
-HOST = socket.gethostbyname(socket.gethostname())
+HOST = '0.0.0.0'
 PORT = 7672
 
 class Colors:
@@ -46,7 +46,7 @@ def handle_client(client_socket, addr):
     client_socket.close()
 
 def main():
-    print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Server Start with IP:{Colors.END} {Colors.MAGENTA}{HOST}{Colors.END} {Colors.BLUE}PORT:{Colors.END}{Colors.MAGENTA}{PORT}{Colors.END}")
+    print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Server Start with IP:{Colors.END} {Colors.MAGENTA}{socket.gethostbyname(socket.gethostname())}{Colors.END} {Colors.BLUE}PORT:{Colors.END}{Colors.MAGENTA}{PORT}{Colors.END}")
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((HOST, PORT))

@@ -1,5 +1,2 @@
-def test(pos):
-    print(pos[0])
-
-arr=[1,2,3]
-test(arr)
+action_range = [[0] for _ in range(11)]
+print(len(action_range[0]))

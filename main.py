@@ -38,18 +38,19 @@ class Servo_Controller_Class:
 
 Servo_controller = []
 Servo_action_thread = []
-action_range = [[0] for _ in range(2)]
+action_range = [[0] for _ in range(11)]
 action_lock=[threading.Lock() for _ in action_range]
 command=[]
 
 client_sockets = []
-HOST = socket.gethostbyname(socket.gethostname())
+HOST = '0.0.0.0'
 PORT = 7672
 
 def append_angle(index,pos):
+    global action_range
     action_lock[index].acquire()
     if len(action_range[index]) == 1:
-        action_range[index] = int(float(pos))
+        action_range[index][0] = int(float(pos))
     if len(action_range[index]) > 1:
         action_range[index].append(int(float(pos)))
     action_lock[index].release()
@@ -94,7 +95,7 @@ def handle_client(client_socket, addr):
 
 def socket_main():
     print(f"\n{Colors.YELLOW}=============Socket Start============={Colors.END}")
-    print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Server Start with IP:{Colors.END} {Colors.MAGENTA}{HOST}{Colors.END} {Colors.BLUE}PORT:{Colors.END}{Colors.MAGENTA}{PORT}{Colors.END}")
+    print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Server Start with IP:{Colors.END} {Colors.MAGENTA}{socket.gethostbyname(socket.gethostname())}{Colors.END} {Colors.BLUE}PORT:{Colors.END}{Colors.MAGENTA}{PORT}{Colors.END}")
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((HOST, PORT))
@@ -126,7 +127,8 @@ def servo_action(controller,pos,index):
         action_lock[index].release()
 
 if __name__ == '__main__':
-    print(f"{Colors.GREEN}=============Program Start============={Colors.END}")
+    print(f"{Colors.BOLD}{Colors.WHITE}=================Program Start================={Colors.END}{Colors.END}")
+    print(f"{Colors.GREEN}=============Servo Controll Start============={Colors.END}")
     try:
         channel=0
         for index in range(11):
@@ -140,11 +142,11 @@ if __name__ == '__main__':
         for controller_thread in Servo_controller:
             Servo_action_thread.append(threading.Thread(target = servo_action, args = (controller_thread,action_range[index],index)))
             index+=1
-
+        print("\n")
         index=0
         for controller_thread in Servo_action_thread:
             controller_thread.start()
-            print(f"{Colors.Green}[Servo Controller] {Colors.END}{Colors.BLUE}Start of Motor No.{index}{Colors.END}")
+            print(f"{Colors.GREEN}[Servo Controller] {Colors.END}{Colors.BLUE}Start of Motor No.{index}{Colors.END}")
             index+=1
     except KeyboardInterrupt:
         print(f"{Colors.GREEN}[Servo Controller] {Colors.END}"+Colors.RED+"Ctrl + C: KeyboardInterrupt"+Colors.END)

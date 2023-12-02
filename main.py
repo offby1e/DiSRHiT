@@ -86,7 +86,7 @@ def handle_client(client_socket, addr):
 
 def socket_main():
     print(f"\n{Colors.YELLOW}=============Socket Start============={Colors.END}")
-    print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Server Start with ip: {HOST}{Colors.END}")
+    print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Server Start with IP: {HOST} PORT:{PORT}{Colors.END}")
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((HOST, PORT))

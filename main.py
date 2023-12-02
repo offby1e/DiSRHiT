@@ -31,16 +31,23 @@ Servo_controller = []
 Servo_action_thread = []
 action_range = [[0] for _ in range(2)]
 action_lock=[threading.Lock() for _ in action_range]
+command=[]
 
 client_sockets = []
 HOST = socket.gethostbyname(socket.gethostname())
 PORT = 7672
 
 def append_angle(index,pos):
-    pass
+    action_lock[index].acquire()
+    if len(action_range[index]) == 1:
+        action_range[index] = int(float(pos))
+    if len(action_range[index]) > 1:
+        action_range[index].append(int(float(pos)))
+    action_lock[index].release()
+    
 
 def handle_client(client_socket, addr):
-    global action_range
+    global action_range, command
     print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Connected by: {addr[0]}:{addr[1]}{Colors.END}")
 
     while True:
@@ -65,10 +72,7 @@ def handle_client(client_socket, addr):
 
                 for action_thread in append_action_thread:
                     action_thread.start()
-
                 
-
-
         except ConnectionResetError as e:
             print(f"{Colors.YELLOW}[Socket] {Colors.END}{Colors.BLUE}Disconnected by: {addr[0]}:{addr[1]}{Colors.END}")
             break
@@ -112,7 +116,7 @@ def servo_action(controller,pos,index):
         action_lock[index].acquire()
         if len(action_range[index]) > 1:
             action_range[index].pop(0)
-        #action_lock.close
+        action_lock[index].release()
 
 if __name__ == '__main__':
     print(f"{Colors.GREEN}=============Program Start============={Colors.END}")

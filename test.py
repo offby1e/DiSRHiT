@@ -20,21 +20,25 @@ class SG90_92R_Class:
         time.sleep(1)
 
 if __name__ == '__main__':
-    Servo = SG90_92R_Class(Channel = 0, ZeroOffset = -10)
 
     angle_max = 90
     angle_delay_t = 0.01
-    a=0
+    angle=0
+    continue_sign=True
+
     try:
         while True:
-    #         for i in range(angle_max):
-    #             time.sleep(angle_delay_t)
-    #             Servo.SetPos(i)
-    #         for i in reversed(range(angle_max)):
-    #             time.sleep(angle_delay_t)
-    #             Servo.SetPos(i)
-            a = input()
-            Servo.SetPos(int(a))
+            continue_sign=True
+            channel = input("Channel num: ")
+            Servo = SG90_92R_Class(Channel = int(channel), ZeroOffset = -10)
+            while continue_sign==True:
+                angle=input("Action angle: ")
+                Servo.SetPos(int(angle))
+                message=input("continue?: ")
+                if message=="n":
+                    continue_sign=False
+                elif message=="y":
+                    continue_sign=True
 
     except KeyboardInterrupt:
         print("Ctrl + C")

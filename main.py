@@ -38,7 +38,7 @@ class Servo_Controller_Class:
 
 Servo_controller = []
 Servo_action_thread = []
-action_range = [[0] for _ in range(11)]
+action_range = [[10] for _ in range(11)]
 action_lock=[threading.Lock() for _ in action_range]
 command=[]
 
@@ -133,8 +133,6 @@ if __name__ == '__main__':
         channel=0
         for index in range(11):
             channel=index
-            if index>4:
-                channel+=1
             Servo_controller.append(Servo_Controller_Class(Channel = channel, ZeroOffset = -10)) 
             print(f"{Colors.GREEN}[Servo Controller] {Colors.END}{Colors.BLUE}Init Controller No.{channel}{Colors.END}")
         
@@ -155,5 +153,5 @@ if __name__ == '__main__':
     finally:
         for controller in Servo_controller:
             controller.Cleanup()
-    
+   
     socket_main()

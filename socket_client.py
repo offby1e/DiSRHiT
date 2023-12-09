@@ -1,7 +1,7 @@
 import socket
 import threading
 
-HOST = '10.244.84.28'  # 서버에 출력되는 IP를 입력하세요
+HOST = '127.0.1.1'
 PORT = 7672
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -24,7 +24,7 @@ class Colors:
 
     END = '\033[0m'
 
-HOST = '10.244.84.28'  # 서버에 출력되는 IP를 입력하세요
+HOST = '10.244.84.105'  # 서버에 출력되는 IP를 입력하세요
 PORT = 7672
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -57,7 +57,7 @@ hand_way="None"
 mode="normal"
 send_angle=[]
 temp_arr=[]
-joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18]]# [[4,3,2],[3,2,1],[2,1,0],[1,0,5],[8,7,6],[7,6,5],[6,5,0],[12,11,10],[11,10,9],[10,9,0],[16,15,14],[15,14,13],[14,13,0],[20,19,18],[19,18,17],[18,17,0]]          [1,5,6],[0,9,10],[0,13,14],[0,17,18]
+joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18],[7,6,5],[11,10,9],[15,14,13],[19,18,17]]# [[4,3,2],[3,2,1],[2,1,0],[1,0,5],[8,7,6],[7,6,5],[6,5,0],[12,11,10],[11,10,9],[10,9,0],[16,15,14],[15,14,13],[14,13,0],[20,19,18],[19,18,17],[18,17,0]]          [1,5,6],[0,9,10],[0,13,14],[0,17,18]
 
 def draw_finger_angles(image, results, joint_list):
     cnt=0
@@ -76,19 +76,23 @@ def draw_finger_angles(image, results, joint_list):
 
             if angle > 180.0:
                 angle = 360-angle
-            angle=180-angle
+            if cnt<4:
+                angle=180-angle
             if cnt>=4:
-                if angle>110.0:
-                    angle=90.0
-                if angle>=0 and angle<=110:
-                    angle=(angle/110)*90
-                    angle=90-angle
+                if angle>80:
+                    angle=((180-angle)/100)*90
+                elif angle<80:
+                    angle=90
+                angle=90-angle
+                if angle<10:
+                    angle=10
             angle=str(round(angle, 2))
             temp_arr.append(angle)
             cv2.putText(image, angle, tuple(np.multiply(b, [640, 480]).astype(int)),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1 ,cv2.LINE_AA)
+            cnt+=1
         send_angle=temp_arr
-        message=f"action:{send_angle[0]}:{send_angle[1]}:{send_angle[2]}:{send_angle[3]}:0:0:0:0:0:0:0"
+        message=f"action:{send_angle[0]}:{send_angle[1]}:{send_angle[2]}:{send_angle[3]}:{send_angle[4]}:{send_angle[5]}:{send_angle[6]}:{send_angle[7]}:0:0:0"
         client_socket.send(message.encode())
         print(f"{Colors.CYAN}[Detected the Hand]{Colors.END} {Colors.WHITE}angle: {send_angle}{Colors.END}")
     return image

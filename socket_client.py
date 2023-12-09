@@ -1,12 +1,11 @@
 import socket
 import threading
 
-HOST = '10.244.84.28'  # 서버에 출력되는 IP를 입력하세요
+HOST = '172.30.1.38'  # 서버에 출력되는 IP를 입력하세요
 PORT = 7672
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((HOST, PORT))
-
+client_socket.connect((HOST, PORT))   
 def recv_data(client_socket):
     while True:
         data = client_socket.recv(1024)

@@ -153,5 +153,9 @@ if __name__ == '__main__':
     finally:
         for controller in Servo_controller:
             controller.Cleanup()
+<<<<<<< HEAD
     
+=======
+   
+>>>>>>> 2b09b7d44d16357af471caded8e60bba80a38afb
     socket_main()

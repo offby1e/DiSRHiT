@@ -24,7 +24,7 @@ class Colors:
 
     END = '\033[0m'
 
-HOST = '172.20.94.104'  # 서버에 출력되는 IP를 입력하세요
+HOST = '10.244.84.105'  # 서버에 출력되는 IP를 입력하세요
 PORT = 7672
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -58,7 +58,7 @@ hand_way="None"
 mode="tracking"
 send_angle=[]
 temp_arr=[]
-joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18],[7,6,5],[11,10,9],[15,14,13],[19,18,17],[0,1,2]]
+joint_list = [[1,5,6],[0,9,10],[0,13,14],[0,17,18],[7,6,5],[11,10,9],[15,14,13],[19,18,17],[1,2,3],[2,3,4]]
 skip_send=0
 
 def draw_finger_angles(image, results, joint_list):
@@ -81,27 +81,36 @@ def draw_finger_angles(image, results, joint_list):
                 angle = 360-angle
             if cnt<4:
                 angle=180-angle
+                if angle>90:
+                    angle=90
             if cnt>=4 and cnt<=7:
-                if angle>80:
-                    angle=((180-angle)/100)*90
-                elif angle<80:
+                if angle>90:
+                    angle=((180-angle)/90)*90
+                elif angle<90:
                     angle=90
                 angle=90-angle
                 if angle<10:
                     angle=10
+                pass
             if cnt==8:
                 angle=180-angle
                 if angle>30:
                     angle=30
-                angle=30-angle
+                if angle<=50:
+                    angle=(angle/30)*90
+            if cnt==9:
+                angle=180-angle
+                if angle>90:
+                    angle=90
+                angle=90-angle
             angle=str(round(angle, 2))
             temp_arr.append(angle)
             cv2.putText(image, angle, tuple(np.multiply(b, [640, 480]).astype(int)),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1 ,cv2.LINE_AA)
             cnt+=1
-        if skip_send%4==0:
+        if skip_send%3==0:
             send_angle=temp_arr
-            message=f"action:{send_angle[0]}:{send_angle[1]}:{send_angle[2]}:{send_angle[3]}:{send_angle[4]}:{send_angle[5]}:{send_angle[6]}:{send_angle[7]}:0:0:{send_angle[8]}"
+            message=f"action:{send_angle[0]}:{send_angle[1]}:{send_angle[2]}:{send_angle[3]}:{send_angle[4]}:{send_angle[5]}:{send_angle[6]}:{send_angle[7]}:{send_angle[8]}:{send_angle[9]}:0"
             client_socket.send(message.encode())
             print(f"{Colors.CYAN}[Detected the Hand]{Colors.END} {Colors.WHITE}angle: {send_angle}{Colors.END}")
         skip_send+=1
@@ -220,7 +229,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5,ma
         if cv2.waitKey(10) & 0xFF == ord('g'):
             mode="game"
         if mode=="game" and cv2.waitKey(10) & 0xFF == ord('s'):
-            
+            pass
         if cv2.waitKey(10) & 0xFF == ord('t'):
             mode="tracking"
         if cv2.waitKey(10) & 0xFF == ord('q'):

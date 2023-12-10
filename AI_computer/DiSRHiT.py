@@ -10,7 +10,7 @@ import time
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 hand_way="None"
 mode="normal"
 joint_list = [[0,1,2],[1,2,3],[2,3,4]]

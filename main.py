@@ -39,6 +39,7 @@ class Servo_Controller_Class:
 Servo_controller = []
 Servo_action_thread = []
 action_range = [[10] for _ in range(11)]
+action_range = [[0],[0],[0],[0],[10],[10],[10],[10],[0],[0],[0]]
 action_lock=[threading.Lock() for _ in action_range]
 command=[]
 

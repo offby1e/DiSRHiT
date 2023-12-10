@@ -4,7 +4,6 @@ import numpy as np
 import uuid
 import os
 from matplotlib import pyplot as plt
-from gtts import gTTS
 import pygame
 import time
 import socket
@@ -24,7 +23,7 @@ class Colors:
 
     END = '\033[0m'
 
-HOST = '172.20.94.104'  # 서버에 출력되는 IP를 입력하세요
+HOST = '172.20.94.104'
 PORT = 7672
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

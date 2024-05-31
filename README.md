@@ -21,6 +21,7 @@
 > ssh rkdgus0810@[ip address(inet)] -p 22
 
 *접속하면 현재 띄워져 있는 창은 라즈베리파이 cmd임.
+<br>
 
 **[directory 이동]**
 > cd Desktop

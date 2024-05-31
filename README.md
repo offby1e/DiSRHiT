@@ -4,6 +4,14 @@
 
 <img src="/md - 작품사진.jpeg" title="DiSRHiT"></img><br/>
 [작동영상]: https://m.youtube.com/watch?v=zfUQFC6qfBE
+[Team]: Blackout_Retech🏴‍☠️
+[Maker]: 김강현(Software), 조윤혁(Leader & Electronic), 장한수(Engeenioring), 김선우(Engeenioring), 장혜원(Desgin)
+[Production period]: 2023.11 ~ 2023.12
+[Engeenioring Files]: None
+
+## [작품 소개 및 Software]
+> 지진과 같은 재난 현장에서구조 작업을 돕기위해 인공 지능 로봇을 개발.
+사람이 직접 재난 현장에서 접근하기 어련운 경우, 혹은 접근이 어려운 장소에서 사람의 섬세함이 필요한 경우에 현장에서 구조 작업에 도움이 되는 인공지능 모션 트랙킹 기술을 사용한 로봇을 개발함.
 
 ## [DiSRHiT 조작 메뉴얼]
 
@@ -42,7 +50,7 @@
 
 *통신이 시작됬다고 뜨면 성공!(초록색 글자로 뜸)
 
-<span style="color:red;">[참고 및 주의 사항]</span><br>
+**[참고 및 주의 사항!!]**<br>
 *혹시 만약에 작동 실패하면 [소켓 통심 주소 확인] 다시 한 번해보기!!
 *메뉴얼 순서 중요!!
 *대소문자 중요!!

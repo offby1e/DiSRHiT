@@ -3,10 +3,10 @@
 > 2023년 미래산업과학고등학교 메이커창작과 교내대회(일경험) - 인공지능 로봇 손
 
 <img src="/md - 작품사진.jpeg" title="DiSRHiT"></img><br/>
-[작동영상]: https://m.youtube.com/watch?v=zfUQFC6qfBE
-[Team]: Blackout_Retech🏴‍☠️
-[Maker]: 김강현(Software), 조윤혁(Leader & Electronic), 장한수(Engeenioring), 김선우(Engeenioring), 장혜원(Desgin)
-[Production period]: 2023.11 ~ 2023.12
+[작동영상]: https://m.youtube.com/watch?v=zfUQFC6qfBE<br>
+[Team]: Blackout_Retech🏴‍☠️<br>
+[Maker]: 김강현(Software), 조윤혁(Leader & Electronic), 장한수(Engeenioring), 김선우(Engeenioring), 장혜원(Desgin)<br>
+[Production period]: 2023.11 ~ 2023.12<br>
 [Engeenioring Files]: None
 
 ## [작품 소개 및 Software]

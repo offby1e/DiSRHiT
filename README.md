@@ -30,7 +30,7 @@
 **[가상환경 활성화]**
 > source bin/activate
 
-입력 라인 맨 앞에 “(AI-Hand)" 뜨면 성공!!
+*입력 라인 맨 앞에 “(AI-Hand)" 뜨면 성공!!
 <br>
 
 **[socket통신 주소 확인]**

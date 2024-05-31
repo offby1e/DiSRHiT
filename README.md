@@ -36,7 +36,7 @@
 (서버가 시작되면 ip주소랑 port번호 등이 뜸)
 
 **[로컬 컴퓨터(AI) 코드 실행]**
-vscode 터미널에서 다음 명령어 실행
+<br>vscode 터미널에서 다음 명령어 실행
 *vscode 터미널 열기ctrl + ~(단, shift x)
 > python main.py
 

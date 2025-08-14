@@ -73,6 +73,8 @@ DiSRHiT/
 │   └── config.yaml
 ├── README.md          # 프로젝트 설명서
 └── profile_image.jpeg # 팀 사진
+```
+---
 
 # 🚀 DiSRHiT 프로젝트 성과 및 활용
 
